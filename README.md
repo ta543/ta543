@@ -1,67 +1,54 @@
-# Hello, I'm [Your Name] 👋
+# Hello, I'm Tobias Andersen 👋
 
 ![Header](https://your-image-url.com)
 
 ## 🚀 About Me
 
-I'm a [Your Profession] with a passion for [Your Interests/Fields of Expertise]. I love working on projects that [Describe What You Enjoy Working On] and am always eager to learn new technologies and improve my skills.
+I'm an Experienced Engineer with a robust track record in architecting, developing, and optimizing enterprise-grade software solutions.
 
-- 🌍  Based in: [Your Location]
-- ✉️  Reach me at: [Your Email]
-- 💼  [LinkedIn](https://www.linkedin.com/in/your-profile)
-- 🌐  [Portfolio](https://your-portfolio-url.com)
+- 🌍  Based in: Stockholm, Sweden
+- ✉️  Reach me at: [tobias@tobiasa.com](mailto:tobias@tobiasa.com)
 
 ## 🛠️ Technologies & Tools
 
 ![Python](https://img.shields.io/badge/-Python-333333?style=flat&logo=python)
-![JavaScript](https://img.shields.io/badge/-JavaScript-333333?style=flat&logo=javascript)
+![Java](https://img.shields.io/badge/-Java-333333?style=flat&logo=java)
+![Go](https://img.shields.io/badge/-Go-333333?style=flat&logo=go)
 ![React](https://img.shields.io/badge/-React-333333?style=flat&logo=react)
 ![Node.js](https://img.shields.io/badge/-Node.js-333333?style=flat&logo=node.js)
-![Django](https://img.shields.io/badge/-Django-333333?style=flat&logo=django)
-![Git](https://img.shields.io/badge/-Git-333333?style=flat&logo=git)
-![Docker](https://img.shields.io/badge/-Docker-333333?style=flat&logo=docker)
+![Kubernetes](https://img.shields.io/badge/-Kubernetes-333333?style=flat&logo=kubernetes)
+![Kafka](https://img.shields.io/badge/-Kafka-333333?style=flat&logo=apache-kafka)
+![AWS](https://img.shields.io/badge/-AWS-333333?style=flat&logo=amazon-aws)
 
 ## 📝 Latest Blog Posts
 
-- [Post Title 1](https://your-blog-url.com/post-1)
-- [Post Title 2](https://your-blog-url.com/post-2)
-- [Post Title 3](https://your-blog-url.com/post-3)
+- [How to Optimize Your Microservices Architecture](https://your-blog-url.com/post-1)
 
 ## 📈 GitHub Stats
 
-![Your GitHub Stats](https://github-readme-stats.vercel.app/api?username=your-github-username&show_icons=true&theme=radical)
+![Tobias's GitHub Stats](https://github-readme-stats.vercel.app/api?username=ta543&show_icons=true&theme=radical)
 
 ## 🔥 Streak Stats
 
-![Your GitHub Streak Stats](https://github-readme-streak-stats.herokuapp.com/?user=your-github-username&theme=radical)
+![Tobias's GitHub Streak Stats](https://github-readme-streak-stats.herokuapp.com/?user=ta543&theme=radical)
 
 ## 🏆 GitHub Trophies
 
-![Your GitHub Trophies](https://github-profile-trophy.vercel.app/?username=your-github-username&theme=radical)
+![Tobias's GitHub Trophies](https://github-profile-trophy.vercel.app/?username=ta543&theme=radical)
 
 ## 🌟 Featured Projects
 
-### [Project 1](https://github.com/your-github-username/project-1)
+### [Enterprise-Grade Microservices](https://github.com/your-github-username/project-1)
 ![Project 1 Screenshot](https://your-project-screenshot-url.com)
-Description of project 1.
-
-### [Project 2](https://github.com/your-github-username/project-2)
-![Project 2 Screenshot](https://your-project-screenshot-url.com)
-Description of project 2.
-
-### [Project 3](https://github.com/your-github-username/project-3)
-![Project 3 Screenshot](https://your-project-screenshot-url.com)
-Description of project 3.
+Dev
 
 ## 📫 How to reach me
 
-- Email: [Your Email](mailto:your-email)
-- LinkedIn: [Your LinkedIn](https://www.linkedin.com/in/your-profile)
-- Twitter: [Your Twitter](https://twitter.com/your-twitter-handle)
+- Email: [tobias@tobiasa.com](mailto:tobias@tobiasa.com)
 
 ## 🎨 Design Philosophy
 
-I believe in clean, efficient, and scalable code. My projects often reflect my emphasis on [Your Design Principles].
+I believe in clean, efficient, and scalable code. My projects often reflect my emphasis on agile project management and DevOps best practices, delivering scalable and resilient solutions across healthcare, fintech, GIS, and IoT sectors.
 
 ## 🤝 Open to Collaborations
 
@@ -69,4 +56,4 @@ I'm always open to interesting projects and collaborations. Feel free to reach o
 
 ---
 
-⭐️ From [Your GitHub Username](https://github.com/your-github-username)
+⭐️ From [Tobias Andersen](https://github.com/ta543)
