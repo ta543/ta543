@@ -2,7 +2,7 @@
 
 ## 🚀 About Me
 
-I'm an Experienced Engineer with a robust track record in architecting, developing, and optimizing enterprise-grade software solutions.
+I'm an experienced engineer with 12 years of experience.
 
 - 🌍  Based in: Stockholm, Sweden
 - ✉️  Reach me at: [tobias@tobiasa.com](mailto:tobias@tobiasa.com)
