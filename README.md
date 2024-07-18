@@ -1,7 +1,5 @@
 # Hello, I'm Tobias Andersen 👋
 
-![Header](file:///Volumes/chappy/chappy/Photos/image.jpg)
-
 ## 🚀 About Me
 
 I'm an Experienced Engineer with a robust track record in architecting, developing, and optimizing enterprise-grade software solutions.
