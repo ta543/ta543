@@ -1,8 +1,6 @@
 
 # Sales Feature with Trial Key Codes
 
-# Sales Feature with Trial Key Codes
-
 ## Objective
 The sales feature is designed to allow salespeople within the organization to experience the product through a trial period activated using unique key codes. These codes are manually assigned by admins specifically to salespeople, who will use them to activate their own trial periods. This system uses a combination of email addresses and device fingerprints to prevent multiple trial activations from the same device or user. The registration and activation process is limited to desktop computers to ensure controlled and secure access.
 
