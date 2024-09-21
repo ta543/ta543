@@ -1,4 +1,3 @@
-
 # Sales Feature with Trial Key Codes
 
 ## Objective
@@ -17,7 +16,7 @@ The Angular frontend serves as the primary interface for both admins and salespe
 **Admin Interface for Key Code Management:**
 - Admins use this interface to generate and manage key codes.
 - Admins can specify details such as the trial duration and relevant metadata.
-- Admins can view and manage the status of all key codes (e.g., active, used, or expired) and assign these codes to salespeople.
+- Admins can view the status of all generated key codes and assign these codes to salespeople.
 
 **Connecting to Backend Services:**
 - The frontend communicates with backend services through an API Gateway.
@@ -26,20 +25,18 @@ The Angular frontend serves as the primary interface for both admins and salespe
 ### 2. Trial Management Microservice
 This microservice handles all the logic related to key codes and trial activations.
 
-**Generating and Storing Key Codes:**
-- Admins generate new key codes, which are stored in the database with details such as status, trial duration, and metadata.
-
-**Assigning Key Codes to Salespeople:**
-- Admins assign the generated key codes to specific salespeople who are responsible for using them to activate their own trials.
+**Generating Key Codes:**
+- Admins generate new key codes and assign them to specific salespeople who are responsible for using them to activate their own trials.
 
 **Handling Trial Activation Requests:**
 - When a salesperson submits a trial activation request, the service validates:
-  - **Key Code Validation:** Checks if the key code exists, is active, and has not expired.
+  - **Key Code Validation:** Checks if the key code is valid and active.
   - **Email Validation:** Ensures that the email has not been used for a trial before. If it has, the request is denied.
   - **Device Fingerprint Validation:** Verifies if the device fingerprint has been used for a trial before. If it has, the request is also denied.
 
 **Storing Activation Information:**
-- If the key code, email, and device fingerprint are all valid and unique, the service activates the trial, storing the activation information in the database with the trial start and end dates.
+- If the key code, email, and device fingerprint are all valid and unique, the service activates the trial and stores the activation information in the database with the trial start and end dates, along with the key code used.
+- The key code is only stored in the database after it has been used for trial activation.
 - The key code status is updated to “used” to prevent it from being reused.
 
 **Sending Notifications:**
@@ -95,14 +92,10 @@ The API Gateway serves as the entry point for all client requests, ensuring secu
 - Distributes incoming requests across multiple instances of microservices to ensure high availability and scalability.
 
 ### 6. Database
-The database is the central storage point for all data related to key codes, trial activations, and salesperson information.
+The database is the central storage point for all data related to trial activations and salesperson information.
 
-**Storing Key Codes:**
-- Saves each key code with details such as trial duration, status, and any associated metadata.
-- Tracks the status of each key code (e.g., active, used, expired) to prevent misuse.
-
-**Recording Trial Activations:**
-- Stores each trial activation along with the associated email and device fingerprint.
+**Storing Trial Activations:**
+- Stores each trial activation along with the associated email, device fingerprint, and the key code used.
 - Records information such as activation date, expiration date, and status (active or expired).
 - Ensures that no two trials can be activated using the same email and device fingerprint combination.
 
@@ -135,23 +128,25 @@ Security and compliance are integral to the sales feature, ensuring that salespe
 
 ## System Flow
 
-**Admin Key Code Management:**
-- Admins create key codes using the admin interface and store them in the database.
-- Admins assign these key codes to salespeople, who will use them to activate their own trial periods.
+1. **Admin Key Code Management:**
+   - Admins create key codes using the admin interface and assign them to salespeople.
+   - Key codes are only stored in the database after being used for activation by a salesperson.
 
-**Salesperson Registration and Activation:**
-- Salespeople register on the Angular frontend and verify their email through the verification link sent by the Email Service.
-- A unique device fingerprint is generated and sent along with the email to the backend for trial activation.
+2. **Salesperson Registration and Activation:**
+   - Salespeople register on the Angular frontend and verify their email through the verification link sent by the Email Service.
+   - A unique device fingerprint is generated and sent along with the email to the backend for trial activation.
 
-**Trial Activation Process:**
-- Salespeople enter the key code they have received from the admin.
-- The Trial Management Microservice validates the key code, email, and device fingerprint combination.
-- If valid, the trial is activated for the salesperson, and the details are stored in the database. A confirmation email is sent to the salesperson.
-- If invalid, the activation is denied, and an error message is displayed.
+3. **Trial Activation Process:**
+   - Salespeople enter the key code they have received from the admin.
+   - The Trial Management Microservice validates the key code, email, and device fingerprint combination.
+   - If valid, the trial is activated for the salesperson, and the details along with the key code are stored in the database. A confirmation email is sent to the salesperson.
+   - If invalid, the activation is denied, and an error message is displayed.
 
-**Monitoring and Notifications:**
-- The system monitors the trial period and updates the trial status accordingly.
-- Reminder emails are sent to salespeople as their trial period nears its end, encouraging them to subscribe.
-- User access is adjusted based on the trial status.
+4. **Monitoring and Notifications:**
+   - The system monitors the trial period and updates the trial status accordingly.
+   - Reminder emails are sent to salespeople as their trial period nears its end, encouraging them to subscribe.
+   - User access is adjusted based on the trial status.
   
-   ![diagram-export-21-09-2024-17_54_38](https://github.com/user-attachments/assets/aec68af5-233b-47d2-bfe9-dd3b4e284fd5)
+
+![diagram](https://github.com/user-attachments/assets/3102fc1c-946a-4915-a407-04130e7750bc)
+
