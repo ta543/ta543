@@ -152,3 +152,6 @@
 5. **Monitoring and Analytics:**
    - Admins can monitor trial activations, key code usage, and system performance through the admin panel.
    - Any anomalies or abuse are flagged and addressed.
+
+![diagram-export-21-09-2024-17_15_38](https://github.com/user-attachments/assets/1ed83852-6687-4123-a3e8-fefec4d71146)
+
