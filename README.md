@@ -1,22 +1,22 @@
 # Sales Feature with Trial Key Codes
 
 ## Objective
-The sales feature is designed to allow salespeople within the organization to experience the product through a trial period activated using unique key codes. These codes are manually assigned by admins specifically to salespeople, who will use them to activate their own trial periods. This system uses a combination of email addresses and device fingerprints to prevent multiple trial activations from the same device or user. The registration and activation process is limited to desktop computers to ensure controlled and secure access.
+The sales feature is designed to allow sales people within the organization to experience the product through a trial period activated using unique key codes. These codes are manually assigned by admins specifically to sales people, who will use them to activate their own trial periods. This system uses a combination of email addresses and device fingerprints to prevent multiple trial activations from the same device or user. The registration and activation process is limited to desktop computers to ensure controlled and secure access.
 
 ## System Components and Their Roles
 
 ### 1. Angular Frontend
-The Angular frontend serves as the primary interface for both admins and salespeople.
+The Angular frontend serves as the primary interface for both admins and sales people.
 
 **Salesperson Interface for Trial Activation:**
-- Salespeople can enter their email and the key code they have received from the admin in the trial activation form.
+- sales people can enter their email and the key code they have received from the admin in the trial activation form.
 - The frontend generates a unique device fingerprint using the FingerprintJS library to uniquely identify the salesperson’s device.
 - This information, including the email, key code, and device fingerprint, is then sent to the backend for validation and activation of the trial.
 
 **Admin Interface for Key Code Management:**
 - Admins use this interface to generate and manage key codes.
 - Admins can specify details such as the trial duration and relevant metadata.
-- Admins can view the status of all generated key codes and assign these codes to salespeople.
+- Admins can view the status of all generated key codes and assign these codes to sales people.
 
 **Connecting to Backend Services:**
 - The frontend communicates with backend services through an API Gateway.
@@ -26,7 +26,7 @@ The Angular frontend serves as the primary interface for both admins and salespe
 This microservice handles all the logic related to key codes and trial activations.
 
 **Generating Key Codes:**
-- Admins generate new key codes and assign them to specific salespeople who are responsible for using them to activate their own trials.
+- Admins generate new key codes and assign them to specific sales people who are responsible for using them to activate their own trials.
 
 **Handling Trial Activation Requests:**
 - When a salesperson submits a trial activation request, the service validates:
@@ -47,7 +47,7 @@ The User Service manages user accounts, authentication, and verification.
 
 **Salesperson Registration and Authentication:**
 - This service handles the collection of salesperson email addresses and basic profile information during registration.
-- It sends a verification email to salespeople to confirm their email address before they can activate a trial.
+- It sends a verification email to sales people to confirm their email address before they can activate a trial.
 
 **Managing User Data:**
 - Stores salesperson data in a database and provides API endpoints to access this information.
@@ -61,14 +61,14 @@ The User Service manages user accounts, authentication, and verification.
 The Email Service manages all email communications related to salesperson registration, trial activations, and reminders.
 
 **Verifying Emails:**
-- Sends a verification email to new salespeople containing a link that they must click to verify their email address.
+- Sends a verification email to new sales people containing a link that they must click to verify their email address.
 - The User Service is notified once the email is successfully verified, allowing the salesperson to proceed with the trial activation process.
 
 **Confirming Trial Activations:**
 - Sends a confirmation email to the salesperson after a successful trial activation, including details such as the trial start and end dates.
 
 **Sending Expiration Reminders:**
-- Sends reminder emails to salespeople as their trial period is nearing its end, encouraging them to subscribe to the service.
+- Sends reminder emails to sales people as their trial period is nearing its end, encouraging them to subscribe to the service.
 
 **API Integration:**
 - Provides API endpoints that can be called by other services, such as the Trial Management Microservice, to send emails based on specific events (e.g., trial activation, email verification).
@@ -123,28 +123,28 @@ Security and compliance are integral to the sales feature, ensuring that salespe
 - Monitors for suspicious activities and flags potential abuse cases for review.
 
 **Privacy Compliance:**
-- Salespeople are informed about the use of device fingerprinting and email verification in the privacy policy.
-- Salespeople have the right to request data deletion or opt-out as required by regulations like GDPR.
+- sales people are informed about the use of device fingerprinting and email verification in the privacy policy.
+- sales people have the right to request data deletion or opt-out as required by regulations like GDPR.
 
 ## System Flow
 
 1. **Admin Key Code Management:**
-   - Admins create key codes using the admin interface and assign them to salespeople.
+   - Admins create key codes using the admin interface and assign them to sales people.
    - Key codes are only stored in the database after being used for activation by a salesperson.
 
 2. **Salesperson Registration and Activation:**
-   - Salespeople register on the Angular frontend and verify their email through the verification link sent by the Email Service.
+   - sales people register on the Angular frontend and verify their email through the verification link sent by the Email Service.
    - A unique device fingerprint is generated and sent along with the email to the backend for trial activation.
 
 3. **Trial Activation Process:**
-   - Salespeople enter the key code they have received from the admin.
+   - sales people enter the key code they have received from the admin.
    - The Trial Management Microservice validates the key code, email, and device fingerprint combination.
    - If valid, the trial is activated for the salesperson, and the details along with the key code are stored in the database. A confirmation email is sent to the salesperson.
    - If invalid, the activation is denied, and an error message is displayed.
 
 4. **Monitoring and Notifications:**
    - The system monitors the trial period and updates the trial status accordingly.
-   - Reminder emails are sent to salespeople as their trial period nears its end, encouraging them to subscribe.
+   - Reminder emails are sent to sales people as their trial period nears its end, encouraging them to subscribe.
    - User access is adjusted based on the trial status.
   
 
