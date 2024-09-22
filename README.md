@@ -1,152 +1,131 @@
-# Sales Feature with Trial Key Codes
+## Sales Feature with Trial Key Codes - Overview
 
-## Objective
-The sales feature is designed to allow sales people within the organization to experience the product through a trial period activated using unique key codes. These codes are manually assigned by admins specifically to sales people, who will use them to activate their own trial periods. This system uses a combination of email addresses and device fingerprints to prevent multiple trial activations from the same device or user. The registration and activation process is limited to desktop computers to ensure controlled and secure access.
+### Objective
+The sales feature is designed to allow sales people within the organization to experience the product through a trial period activated using unique key codes. These codes are manually assigned by admins specifically to sales people, who will use them to activate their own trial periods. The system utilizes a combination of email addresses and device fingerprints to prevent multiple trial activations from the same device or user. The registration and activation process is limited to desktop computers to ensure controlled and secure access.
 
 ## System Components and Their Roles
 
 ### 1. Angular Frontend
-The Angular frontend serves as the primary interface for both admins and sales people.
+The Angular frontend serves as the primary interface for both admins and sales people, providing secure and user-friendly interactions for trial activation and key code management.
 
-**Salesperson Interface for Trial Activation:**
-- sales people can enter their email and the key code they have received from the admin in the trial activation form.
-- The frontend generates a unique device fingerprint using the FingerprintJS library to uniquely identify the salesperson’s device.
-- This information, including the email, key code, and device fingerprint, is then sent to the backend for validation and activation of the trial.
+#### Salesperson Interface for Trial Activation:
+- **Trial Activation Form:** Sales people enter their email and the key code they received from the admin. The frontend generates a unique device fingerprint using an enhanced FingerprintJS library integration, which collects additional data points such as browser details, OS information, and installed fonts. This robust identifier is hashed for security.
+- **Data Submission:** The email, key code, and hashed device fingerprint are sent to the backend for validation and trial activation. A short-lived JWT token is used for authentication, and all communication is secured via HTTPS.
+- **Enhanced Device Fingerprinting:** The use of additional data points in the fingerprint generation reduces false positives and negatives, ensuring reliable device identification and preventing multiple trial activations from the same device.
 
-**Admin Interface for Key Code Management:**
-- Admins use this interface to generate and manage key codes.
-- Admins can specify details such as the trial duration and relevant metadata.
-- Admins can view the status of all generated key codes and assign these codes to sales people.
+#### Admin Interface for Key Code Management:
+- **Key Code Generation and Assignment:** Admins generate key codes with specific parameters like trial duration and metadata. These key codes are assigned to sales people who will use them for their own trials.
+- **Key Code Tracking and Expiry Management:** The system tracks all key code assignments, and unused key codes have an expiry date. Admins are notified before a key code expires, ensuring efficient management and reducing the risk of unused key codes.
+- **Security and Logging:** All actions, including key code generation, assignment, and management, are logged to ensure accountability and prevent misuse.
 
-**Connecting to Backend Services:**
-- The frontend communicates with backend services through an API Gateway.
-- All actions, such as registration and trial activation, are authenticated using JWT tokens to ensure secure communication.
+#### Connecting to Backend Services:
+- The frontend communicates with backend services through an API Gateway. All requests, such as registration and trial activation, are authenticated using JWT tokens. The tokens are short-lived to enhance security, and refresh tokens are used to maintain sessions.
 
-### 2. Trial Management Microservice
-This microservice handles all the logic related to key codes and trial activations.
+### 2. API Gateway
+The API Gateway serves as the central entry point for all client requests, ensuring secure and efficient communication between the frontend and backend services.
 
-**Generating Key Codes:**
-- Admins generate new key codes and assign them to specific sales people who are responsible for using them to activate their own trials.
+#### Routing and Security:
+- **Request Routing:** Routes requests to the appropriate microservice based on the URL and method.
+- **Authentication and Authorization:** Verifies JWT tokens for authentication and implements role-based access control (RBAC) to restrict certain actions, such as key code management, to authorized users only.
+- **Rate Limiting and Load Balancing:** Implements rate limiting to prevent abuse of trial activation attempts and distributes incoming requests across multiple microservices for high availability and scalability.
 
-**Handling Trial Activation Requests:**
-- When a salesperson submits a trial activation request, the service validates:
-  - **Key Code Validation:** Checks if the key code is valid and active.
-  - **Email Validation:** Ensures that the email has not been used for a trial before. If it has, the request is denied.
-  - **Device Fingerprint Validation:** Verifies if the device fingerprint has been used for a trial before. If it has, the request is also denied.
+### 3. Trial Management Microservice
+This microservice handles all logic related to key codes, trial activations, and user validation.
 
-**Storing Activation Information:**
-- If the key code, email, and device fingerprint are all valid and unique, the service activates the trial and stores the activation information in the database with the trial start and end dates, along with the key code used.
-- The key code is only stored in the database after it has been used for trial activation.
-- The key code status is updated to “used” to prevent it from being reused.
+#### Key Code Management:
+- **Generating and Assigning Key Codes:** Admins generate unique key codes and assign them to sales people. These key codes are logged but not stored in the database until used for trial activation.
+- **Expiry and Validation:** Unused key codes have an expiry date. If a key code is about to expire, the admin is notified, allowing for proactive management.
 
-**Sending Notifications:**
-- Once the trial is successfully activated, the service triggers the Email Service to send a confirmation email to the salesperson with details about the trial period.
+#### Trial Activation Process:
+- **Validation Checks:**
+  - **Key Code Validation:** Confirms that the key code is valid, active, and not expired.
+  - **Email Validation:** Ensures that the email has not been used for a previous trial. If the email is flagged as already used, the activation request is denied.
+  - **Device Fingerprint Validation:** Verifies that the hashed device fingerprint has not been used for a previous trial activation. This is done using an enhanced fingerprinting method that integrates multiple data points.
 
-### 3. User Service
-The User Service manages user accounts, authentication, and verification.
+- **Rate Limiting and Abuse Prevention:**
+  - Limits the number of activation attempts per email and device fingerprint combination to 5 per hour. Exceeding this limit triggers a cooldown period and sends an alert to the admin.
+  - Repeated invalid activation attempts result in a temporary block of the email/device combination and an alert to the admin, protecting against brute-force attacks.
 
-**Salesperson Registration and Authentication:**
-- This service handles the collection of salesperson email addresses and basic profile information during registration.
-- It sends a verification email to sales people to confirm their email address before they can activate a trial.
+#### Storing Activation Information:
+- **Post-Activation Storage:** If the key code, email, and device fingerprint are all valid and unique, the trial is activated. The activation information, including the key code used, is stored in the database.
+- **Atomic Operations:** A transactional locking mechanism is used during the activation process to ensure that key codes are marked as used only once, preventing concurrent usage and maintaining data integrity.
 
-**Managing User Data:**
-- Stores salesperson data in a database and provides API endpoints to access this information.
-- Shares user data, such as email and verification status, with the Trial Management Microservice during trial activation requests.
+#### Sending Notifications:
+- **Confirmation Emails:** The Email Service sends a confirmation email to the sales person upon successful trial activation, providing details about the trial period.
+- **Expiration Reminders:** Reminder emails are sent as the trial period nears its end, encouraging the sales person to subscribe.
 
-**Supporting Authentication:**
-- Issues JWT tokens to ensure secure communication between the frontend and backend.
-- Manages user sessions and supports login and logout functionalities.
+### 4. User Service
+The User Service handles user account management, authentication, and verification.
 
-### 4. Email Service
-The Email Service manages all email communications related to salesperson registration, trial activations, and reminders.
+#### Salesperson Registration and Authentication:
+- **Registration Handling:** Collects the sales person's email address and basic profile information during registration. The system limits the number of verification emails sent to an email address within a 15-minute window to prevent spamming and abuse.
+- **Email Verification:** Sends a verification email to sales people. The sales person must click the link in the email to verify their address before they can activate a trial.
 
-**Verifying Emails:**
-- Sends a verification email to new sales people containing a link that they must click to verify their email address.
-- The User Service is notified once the email is successfully verified, allowing the salesperson to proceed with the trial activation process.
+#### User Data Management:
+- **Data Storage and Sharing:** Stores sales person data, including email and verification status. This information is shared with the Trial Management Microservice during trial activation requests.
+- **Authentication Support:** Issues short-lived JWT tokens (valid for 15 minutes) and manages user sessions. Refresh tokens are used to maintain sessions, and all communications are secured using HTTPS.
 
-**Confirming Trial Activations:**
-- Sends a confirmation email to the salesperson after a successful trial activation, including details such as the trial start and end dates.
+### 5. Email Service
+The Email Service manages all email communications for registration, trial activations, and reminders.
 
-**Sending Expiration Reminders:**
-- Sends reminder emails to sales people as their trial period is nearing its end, encouraging them to subscribe to the service.
+#### Email Verification:
+- Sends a verification email containing a unique link that the sales person must click to verify their email address. Verification attempts are limited to prevent abuse.
 
-**API Integration:**
-- Provides API endpoints that can be called by other services, such as the Trial Management Microservice, to send emails based on specific events (e.g., trial activation, email verification).
+#### Trial Activation and Reminder Emails:
+- **Confirmation Emails:** Sends a confirmation email after a successful trial activation, detailing the start and end dates of the trial period.
+- **Expiration Reminders:** Sends reminder emails as the trial period approaches its end, encouraging the sales person to subscribe to the service.
 
-### 5. API Gateway
-The API Gateway serves as the entry point for all client requests, ensuring secure and efficient communication between the frontend and backend services.
-
-**Routing Requests:**
-- Receives all client requests and forwards them to the appropriate microservice based on the request URL and method.
-- Ensures that the request is authenticated and authorized before forwarding it to the corresponding microservice.
-
-**Managing Authentication and Authorization:**
-- Verifies JWT tokens to ensure that the salesperson is authenticated.
-- Implements role-based access control (RBAC) to restrict certain actions, such as key code management, to authorized users only.
-
-**Rate Limiting and Throttling:**
-- Implements rate limiting on endpoints to prevent abuse, such as repeated trial activation attempts or brute-force attacks.
-- Ensures that no single IP address can attempt too many trial activations in a short period.
-
-**Load Balancing:**
-- Distributes incoming requests across multiple instances of microservices to ensure high availability and scalability.
+#### API Integration:
+- Provides API endpoints for sending emails based on specific triggers such as trial activation, verification, and expiration reminders.
 
 ### 6. Database
-The database is the central storage point for all data related to trial activations and salesperson information.
+The database is the central repository for all data related to trial activations and sales person information.
 
-**Storing Trial Activations:**
-- Stores each trial activation along with the associated email, device fingerprint, and the key code used.
-- Records information such as activation date, expiration date, and status (active or expired).
-- Ensures that no two trials can be activated using the same email and device fingerprint combination.
+#### Data Storage and Management:
+- **Trial Activation Records:** Stores each trial activation, including the associated email, hashed device fingerprint, and key code used. Ensures that no two trials can be activated using the same email and device fingerprint combination.
+- **User Data:** Stores sales person information, including email, profile details, and verification status. This data is encrypted in transit and at rest to ensure security.
 
-**Managing User Data:**
-- Stores salesperson information, including email, profile details, and verification status.
-- Allows the system to verify whether a salesperson is eligible for a trial activation.
-
-**Ensuring Security and Data Integrity:**
-- Encrypts sensitive data such as emails and fingerprints to protect salesperson information.
-- Uses constraints and foreign key relationships to maintain data integrity and consistency.
+#### Optimization and Integrity:
+- **Data Archival:** Archives old data to improve query performance and reduce storage costs.
+- **Transactional Integrity:** Ensures that key code usage is atomic and prevents concurrent usage conflicts.
 
 ### 7. Security and Compliance
-Security and compliance are integral to the sales feature, ensuring that salesperson data is protected and that the system adheres to regulatory standards.
+Security and compliance are integral to the sales feature, ensuring that sales person data is protected and that the system adheres to regulatory standards.
 
-**Authentication and Authorization:**
+#### Authentication and Authorization:
 - All actions are authenticated using JWT tokens to ensure secure communication between the frontend and backend.
-- Admin actions, such as key code management, are restricted based on roles and permissions, preventing unauthorized access.
+- Admin actions, such as key code management, are restricted based on roles and permissions. Regular audits are conducted to ensure compliance and security.
 
-**Data Encryption:**
-- Data such as email addresses, fingerprints, and key codes are encrypted both in transit and at rest.
-- HTTPS is enforced for all API communication to protect data integrity.
+#### Data Encryption:
+- All sensitive data, such as email addresses, fingerprints, and key codes, is encrypted both in transit and at rest. HTTPS is enforced for all API communication to protect data integrity.
 
-**Rate Limiting:**
-- Rate limiting on API endpoints helps prevent abuse of the trial activation feature and brute-force attacks.
-- Monitors for suspicious activities and flags potential abuse cases for review.
-
-**Privacy Compliance:**
-- sales people are informed about the use of device fingerprinting and email verification in the privacy policy.
-- sales people have the right to request data deletion or opt-out as required by regulations like GDPR.
+#### Privacy Compliance:
+- Sales people are informed about the use of device fingerprinting and email verification in the privacy policy.
+- The system provides options for data deletion and opt-out as required by GDPR. Data retention policies ensure that data is stored only for the necessary duration and securely deleted thereafter.
 
 ## System Flow
 
 1. **Admin Key Code Management:**
-   - Admins create key codes using the admin interface and assign them to sales people.
-   - Key codes are only stored in the database after being used for activation by a salesperson.
+   - Admins create key codes using the admin interface and assign them to sales people. Key codes are logged and tracked for accountability, and expiry dates are set.
+   - Key codes are only stored in the database after being used for activation by a sales person.
 
 2. **Salesperson Registration and Activation:**
-   - sales people register on the Angular frontend and verify their email through the verification link sent by the Email Service.
-   - A unique device fingerprint is generated and sent along with the email to the backend for trial activation.
+   - Sales people register on the Angular frontend and verify their email through the verification link sent by the Email Service. Verification attempts are limited to prevent abuse.
+   - A unique, hashed device fingerprint is generated and sent along with the email to the backend for trial activation.
 
 3. **Trial Activation Process:**
-   - sales people enter the key code they have received from the admin.
-   - The Trial Management Microservice validates the key code, email, and device fingerprint combination.
-   - If valid, the trial is activated for the salesperson, and the details along with the key code are stored in the database. A confirmation email is sent to the salesperson.
-   - If invalid, the activation is denied, and an error message is displayed.
+   - Sales people enter the key code they received from the admin. The Trial Management Microservice validates the key code, email, and hashed device fingerprint combination.
+   - If valid, the trial is activated, and the details are stored in the database. A confirmation email is sent to the sales person. If invalid, the activation is denied, and repeated invalid attempts trigger a temporary block and an admin alert.
 
 4. **Monitoring and Notifications:**
-   - The system monitors the trial period and updates the trial status accordingly.
-   - Reminder emails are sent to sales people as their trial period nears its end, encouraging them to subscribe.
+   - The system monitors the trial period and updates the trial status. Reminder emails are sent as the trial period nears its end, encouraging the sales person to subscribe.
    - User access is adjusted based on the trial status.
-  
 
-![diagram](https://github.com/user-attachments/assets/3102fc1c-946a-4915-a407-04130e7750bc)
+5. **Security and Compliance:**
+   - Regular audits, data encryption, and role-based access controls ensure the security and integrity of the system.
+   - GDPR compliance is maintained with data deletion and opt-out options.
+
+
+  ![diagram-export-22-09-2024-08_12_03](https://github.com/user-attachments/assets/23670e1e-709b-4d9b-9afe-8b3c0ff28b24)
+
 
