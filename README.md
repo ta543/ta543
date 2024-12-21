@@ -2,7 +2,7 @@
 
 #### **Senior QA Automation Engineer**
 
-<p align="left"> <img src="https://komarev.com/ghpvc/?username=tobiasandersonqa&label=Profile%20views&color=0e75b6&style=flat" alt="tobiasandersonqa" /> </p>
+<p align="left"> <img src="https://komarev.com/ghpvc/?username=antonkomarev&label=Profile%20views&color=blue&style=flat" alt="antonkomarev" /> </p>
 
 ### 🌟 **About Me**
 - 💼 **12+ years of experience**, currently working as a **Senior QA Automation Engineer** at *Circle K Group Europe*.
