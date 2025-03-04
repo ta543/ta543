@@ -15,7 +15,6 @@
 ![Cypress](https://img.shields.io/badge/-Cypress-000?&logo=Cypress)
 ![JMeter](https://img.shields.io/badge/-JMeter-000?&logo=apache-jmeter)
 ![Playwright](https://img.shields.io/badge/-Playwright-000?&logo=playwright)
-![Katalon Studio](https://img.shields.io/badge/-Katalon%20Studio-000?&logo=katalon-studio)
 ![Robot Framework](https://img.shields.io/badge/-Robot%20Framework-000?&logo=robot-framework)
 ![TestRail](https://img.shields.io/badge/-TestRail-000?&logo=testrail)
 ![Xray](https://img.shields.io/badge/-Xray-000?&logo=xray)
